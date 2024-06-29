@@ -1,7 +1,7 @@
 # scala-wordle
-This will be a wordle made in scala
+This will be a Wordle made in Scala 3.
 
-Answer and Guess list from Wordle Creator based on the current NYT's version
+Answer and guess list from Wordle creator based on the current NYT's version
 https://gist.github.com/cfreshman/d5fb56316158a1575898bba1eed3b5da
 https://gist.github.com/cfreshman/d97dbe7004522f7bc52ed2a6e22e2c04
 
