@@ -4,6 +4,8 @@ import scala.util.Random
 import scala.util.matching.Regex
 import scala.collection.mutable.Map
 
+var coquetteCache: List[String] = List()
+
 @main def wordle() = 
     val answerList: List[String] = Source.fromFile("src/wordle-nyt-words-14855.txt").getLines().toList
     val answer: String = answerList(Random.between(0, answerList.length-1))
@@ -25,11 +27,11 @@ import scala.collection.mutable.Map
         finally
             guessList(triesLeft) = saveGameState(guess, answer)
             if guess == answer then //faster than calling the checker function
+                printGameState(guessList, triesLeft)
                 println("You win")
-                printGameState(guessList)
                 triesLeft = 0 //breaks out of while loop
             else
-                println(guessList(triesLeft))
+                printGameState(guessList, triesLeft)
                 triesLeft -= 1
 
     
@@ -46,12 +48,21 @@ def saveGameState(guess: String, answer: String): List[String] =
     do
         if guess(i) == answer(i) then gameState = gameState :+ "green"
         else if answer.contains(guess(i)) then gameState = gameState :+ "yellow"
-        else gameState = gameState :+ "reset"
+        else gameState = gameState :+ "white"
     return gameState
     
-def printGameState(gameState: Map[Int, List[String]]): Unit =
+def printGameState(gameState: Map[Int, List[String]], currentTry: Int): Unit =
     val green: String = Console.GREEN_B
     val yellow: String = Console.YELLOW_B
+    val white: String = Console.WHITE_B
     val reset: String = Console.RESET
-    var coquetteGuess: String = null
-    
+    var coquetteGuess: String = "" //format: (color + letter1 + color + letter2 + color + letter3 + color + letter4 + color + letter5 + reset)
+    val currentGuess: List[String] = gameState(currentTry)
+    for i <- 1 to 5 //getting the rest of the list besides the guess
+    do
+        currentGuess(i).toString match
+            case "green" => coquetteGuess = coquetteGuess + green + currentGuess(0)(i-1) + reset
+            case "yellow" => coquetteGuess = coquetteGuess + yellow + currentGuess(0)(i-1) + reset
+            case "white" => coquetteGuess = coquetteGuess + white + currentGuess(0)(i-1) + reset
+    coquetteCache = coquetteCache :+ coquetteGuess
+    for guess <- coquetteCache do println(guess)
