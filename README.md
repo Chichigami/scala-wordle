@@ -7,3 +7,5 @@ https://gist.github.com/cfreshman/d97dbe7004522f7bc52ed2a6e22e2c04
 Guess list seems to be wrong? I know it's additional possible guess but when combined, there are dupes.
 
 I will come back to this one day and add a db and maybe a small app to make it look nicer
+
+<img width="226" alt="image" src="https://github.com/Chichigami/scala-wordle/assets/47513960/70fffd1a-76f4-416a-bafa-46c60fe7a773">
