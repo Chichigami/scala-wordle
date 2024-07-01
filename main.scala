@@ -5,10 +5,10 @@ import scala.util.matching.Regex
 import scala.collection.mutable.Map
 
 var coquetteCache: List[String] = List()
-var keyboardState: Map[Char, String] = Map(
-    'Q'->"White", 'W'->"White", 'E'->"White", 'R'->"White", 'T'->"White", 'Y'->"White", 'U'->"White", 'I'->"White", 'O'->"White",'P'->"White",
-            'A'->"White", 'S'->"White", 'D'->"White", 'F'->"White", 'G'->"White", 'H'->"White", 'J'->"White", 'K'->"White", 'L'->"White",
-                        'Z'->"White", 'X'->"White", 'C'->"White", 'V'->"White", 'B'->"White", 'N'->"White", 'M'->"White"
+var keyboardState: scala.collection.mutable.Map[Char, String] = Map(
+    'Q'->"white", 'W'->"white", 'E'->"white", 'R'->"white", 'T'->"white", 'Y'->"white", 'U'->"white", 'I'->"white", 'O'->"white",'P'->"white",
+            'A'->"white", 'S'->"white", 'D'->"white", 'F'->"white", 'G'->"white", 'H'->"white", 'J'->"white", 'K'->"white", 'L'->"white",
+                        'Z'->"white", 'X'->"white", 'C'->"white", 'V'->"white", 'B'->"white", 'N'->"white", 'M'->"white"
     )
 
 @main def wordle() = 
@@ -28,20 +28,20 @@ var keyboardState: Map[Char, String] = Map(
         while
             valid == false
         do
-            guess = readLine("Take a guess\n").toUpperCase().replaceAll(" ","")
-            printKeyboard()
+            guess = readLine("Take a guess: ").toUpperCase().replaceAll(" ","")
             try
                 valid = isValidGuess(guess) //break loop if valid
             catch
                 case e: Exception => println(e)
 
         guessList(triesLeft) = saveGameState(guess, answer)
-        if guess == answer then //faster than calling the checker functio
+        if guess == answer then //faster than calling the checker function
             printGameState(guessList, triesLeft)
             println("You win")
             triesLeft = 0 //breaks out of while loop
         else
             printGameState(guessList, triesLeft)
+            printKeyboard()
             triesLeft -= 1
 
 
@@ -49,7 +49,7 @@ def isValidGuess(guess: String): Boolean =
     var isValid: Boolean = true
     var errorString: String = ""
     val numberPattern: Regex = "[0-9]".r
-    val specialPattern: Regex = "[\\^&*()!@#$%`/?.>,<\\{}\\[\\]\\-_+=|]".r
+    val specialPattern: Regex = "[\\^&*()!@#$%`/?.>,<\\{}\\[\\]\\-_+=|]".r //all special characters
     if guess.length != 5 then 
         isValid = false
         errorString += "Need 5 letters. "
@@ -74,8 +74,8 @@ def saveGameState(guess: String, answer: String): List[String] =
             gameState = gameState :+ "yellow"
             keyboardState(guess(i)) = "yellow"
         else
-            keyboardState(guess(i)) = "reset"
             gameState = gameState :+ "white"
+            keyboardState(guess(i)) = "blank"
     return gameState
     
 def printGameState(gameState: Map[Int, List[String]], currentTry: Int): Unit =
@@ -83,11 +83,11 @@ def printGameState(gameState: Map[Int, List[String]], currentTry: Int): Unit =
     val yellow: String = Console.YELLOW_B
     val white: String = Console.WHITE_B
     val reset: String = Console.RESET
-    var coquetteGuess: String = "" //format: (color + letter1 + color + letter2 + color + letter3 + color + letter4 + color + letter5 + reset)
+    var coquetteGuess: String = "            " //format: (color + letter1 + color + letter2 + color + letter3 + color + letter4 + color + letter5 + reset)
     val currentGuess: List[String] = gameState(currentTry)
     for i <- 1 to 5 //getting the rest of the list besides the guess
     do
-        currentGuess(i).toString match
+        currentGuess(i) match
             case "green" => coquetteGuess = coquetteGuess + green + currentGuess(0)(i-1) + reset
             case "yellow" => coquetteGuess = coquetteGuess + yellow + currentGuess(0)(i-1) + reset
             case "white" => coquetteGuess = coquetteGuess + white + currentGuess(0)(i-1) + reset
@@ -95,7 +95,25 @@ def printGameState(gameState: Map[Int, List[String]], currentTry: Int): Unit =
     for guess <- coquetteCache do println(guess)
 
 def printKeyboard(): Unit =
-    val row1: String = "qwertyuiop"
-    val row2: String =  "asdfghjkl"
-    val row3: String =   "zxcvbnm"
-    println(keyboardState)
+    val row1: String = "QWERTYUIOP"
+    val row2: String =  "ASDFGHJKL"
+    val row3: String =   "ZXCVBNM"
+    val green: String = Console.GREEN_B
+    val yellow: String = Console.YELLOW_B
+    val white: String = Console.WHITE_B
+    val reset: String = Console.RESET
+    var coquetteKeyboard: String = "         "
+
+    for letter <- row1 + row2 + row3
+    do
+        keyboardState(letter) match
+            case "green" => coquetteKeyboard = coquetteKeyboard + green + letter + reset //what is correct
+            case "yellow" => coquetteKeyboard = coquetteKeyboard + yellow + letter + reset //what is almost correct
+            case "white" => coquetteKeyboard = coquetteKeyboard + white + letter + reset //what you haven't used
+            case _ => coquetteKeyboard = coquetteKeyboard + reset + letter //what you tried and is wrong
+
+        letter match
+            case 'P' => coquetteKeyboard = f"$coquetteKeyboard\n         "
+            case 'L' => coquetteKeyboard = f"$coquetteKeyboard\n          "
+            case _ =>
+    println(f"------KEYBOARD-STATUS-------\n$coquetteKeyboard\n----------------------------")
