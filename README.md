@@ -5,3 +5,5 @@ Answer and guess list from Wordle creator based on the current NYT's version
 https://gist.github.com/cfreshman/d5fb56316158a1575898bba1eed3b5da
 https://gist.github.com/cfreshman/d97dbe7004522f7bc52ed2a6e22e2c04
 Guess list seems to be wrong? I know it's additional possible guess but when combined, there are dupes.
+
+I will come back to this one day and add a db and maybe a small app to make it look nicer
