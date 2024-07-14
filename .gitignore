@@ -1,3 +1,4 @@
-/metals
+.metals
 .vscode
 .bsp
+.scala-build
