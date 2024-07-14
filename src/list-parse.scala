@@ -1,9 +1,12 @@
-package guessParse
+package fileParse
 import scala.io.Source
 import scala.collection.concurrent.TrieMap
+import scala.util.Random
 
-def parse(): List[String] =
-    val guessFile = Source.fromFile("src/wordle-nyt-allowed-guesses-update-12546.txt") //open file
-    var guessList: List[String] = guessFile.getLines().toList
-    guessFile.close()
-    return guessList
+
+def getAnswer(): String =
+    val answerFile = Source.fromFile("src/wordle-nyt-words-14855.txt")
+    val answerList: List[String] = answerFile.getLines().toList
+    answerFile.close()
+    val answer: String = answerList(Random.between(0, answerList.length-1)).toUpperCase()
+    return answer

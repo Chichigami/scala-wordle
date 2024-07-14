@@ -1,9 +1,8 @@
 import scala.io.StdIn.readLine
 import scala.io.Source
-import scala.util.Random
 import scala.util.matching.Regex
 import scala.collection.mutable.Map
-//import guessParse.parse
+import fileParse.getAnswer
 
 var coquetteCache: List[String] = List()
 var keyboardState: scala.collection.mutable.Map[Char, String] = Map(
@@ -14,11 +13,7 @@ var keyboardState: scala.collection.mutable.Map[Char, String] = Map(
 //val possibleGuesses: List[String] = parse()
 
 @main def wordle() = 
-    val answerFile = Source.fromFile("src/wordle-nyt-words-14855.txt")
-    val answerList: List[String] = answerFile.getLines().toList
-    answerFile.close()
-    val answer: String = answerList(Random.between(0, answerList.length-1)).toUpperCase()
-    //println(f"ANSWER: $answer")
+    val answer = getAnswer()
     println("Welcome to Wordle made in Scala\n" +
             "-------------------------------")
     var triesLeft: Int = 6
@@ -63,7 +58,7 @@ def isValidGuess(guess: String): Boolean =
     if specialPattern.findFirstIn(guess).isDefined then 
         isValid = false
         errorString += "No special characters either."
-    //was supposed to check if guess is inside guess list, but guess list sort of broken? 
+    //was supposed to check if guess is inside guess list, but guess file sort of broken? 
     if isValid == false then throw Exception(errorString) 
     return isValid
 
