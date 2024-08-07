@@ -74,7 +74,8 @@ def saveGameState(guess: String, answer: String): List[String] =
             keyboardState(guess(i)) = "green"
         else if answer.contains(guess(i)) then 
             gameState = gameState :+ "yellow"
-            keyboardState(guess(i)) = "yellow"
+            if keyboardState(guess(i)) != "green" then
+                keyboardState(guess(i)) = "yellow"
         else
             gameState = gameState :+ "white"
             keyboardState(guess(i)) = "blank"
