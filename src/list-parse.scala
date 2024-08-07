@@ -1,7 +1,7 @@
 package fileParse
 import scala.io.Source
-import scala.collection.concurrent.TrieMap
 import scala.util.Random
+//import scala.collection.concurrent.TrieMap
 
 
 def getAnswer(): String =
@@ -10,3 +10,5 @@ def getAnswer(): String =
     answerFile.close()
     val answer: String = answerList(Random.between(0, answerList.length-1)).toUpperCase()
     return answer
+
+//parse guess x answer file one day to a trie?
