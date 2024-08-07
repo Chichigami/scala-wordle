@@ -1,5 +1,4 @@
 package wordle
-import scala.io.Source
 import scala.io.StdIn.readLine
 import scala.util.matching.Regex
 import scala.collection.mutable.Map
@@ -38,12 +37,14 @@ def gameStart() =
         guessList(triesLeft) = saveGameState(guess, answer)
         if guess == answer then //faster than calling the checker function
             printGameState(guessList, triesLeft)
-            println("You win")
+            println("Congratulations, you won")
             triesLeft = 0 //breaks out of while loop
         else
             printGameState(guessList, triesLeft)
             printKeyboard()
             triesLeft -= 1
+            if triesLeft == 0 then
+                println(f"You lost. The answer is $answer")
 
 
 def isValidGuess(guess: String): Boolean =
