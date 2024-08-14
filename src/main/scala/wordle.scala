@@ -4,6 +4,7 @@ import scala.util.matching.Regex
 import scala.collection.mutable.Map
 import fileParse.getAnswer
 import ErrorHandle.Error.ErrorInterface
+import scala.util.Random
 
 
 /* 
@@ -20,11 +21,12 @@ object wordle {
                             'Z'->"white", 'X'->"white", 'C'->"white", 'V'->"white", 'B'->"white", 'N'->"white", 'M'->"white"
         )
 
-    def gameStart(): Unit = 
+    def gameStart(seed: => Int = Random.nextInt()): Unit = 
         println("Welcome to Wordle made in Scala\n" +
                 "-------------------------------")
-        val answer = getAnswer()
-        //println(answer)
+
+        val answer = getAnswer(seed)
+        //println(f"$seed: $answer")
         gameCore(answer)
 
     def gameCore(answer: String): Unit =
@@ -35,10 +37,11 @@ object wordle {
         do
             val currentGuess = readLine("Take a guess: ").toUpperCase().replaceAll(" ","")
             val validGuess = validateGuess(currentGuess)
+
             if validGuess.output then
                 guessList(attemptsLeft) = saveGameState(currentGuess, answer)
 
-                if currentGuess == answer then //faster than calling the checker function
+                if currentGuess == answer then
                     printGameState(guessList, attemptsLeft)
                     println("Congratulations, you won")
                     attemptsLeft = 0
@@ -57,6 +60,7 @@ object wordle {
     def gameEnd(answer: String, guessList: Map[Int, List[String]]): Unit =
         //ask if they want the defition to the word. if yes then give def, else don't do anything
         val userInfo = readLine("What is your alias? ")
+        val response: String = readLine("Do you want the definition of the word [Y/N]? ")
         //clean data so it doesn't drop table
         //saveScore()
         //show stats
