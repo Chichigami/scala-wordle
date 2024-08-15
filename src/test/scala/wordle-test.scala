@@ -2,6 +2,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import wordle.wordle.gameStart
 import fileParse.getAnswer
 import wordle.wordle.validateGuess
+import wordle.wordle.gameCore
 
 class WordleTest extends AnyFunSuite:
 
@@ -54,5 +55,4 @@ class WordleTest extends AnyFunSuite:
         val actual = validateGuess(input).error
         assert(actual == expected)
     }
-
 end WordleTest
